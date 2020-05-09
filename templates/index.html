@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<meta charset="utf-8"/>
+<html lang="en">
+<head>
+    <title>Corona virus Live Update</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js">
+    </script>
+    <style>
+        body {
+            padding: 50px;
+        }
+
+        #summary, #bangladesh {
+            padding: 10px;
+            border: 1px solid #e2e2e2;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            let conn = null;
+            let name = "UNKNOWN";
+
+            function connect() {
+                const wsUri = (window.location.protocol === 'https:' && 'wss://' || 'ws://') + window.location.host;
+                conn = new WebSocket(wsUri);
+                conn.onopen = function () {
+                    //log('Connected.');
+                };
+                conn.onmessage = function (e) {
+                    const data = JSON.parse(e.data);
+                    console.log(data);
+
+                    switch (data.state) {
+                        case 'global':
+                            let total_cases = document.getElementById('total_cases');
+                            let total_deaths = document.getElementById('total_deaths');
+                            let total_recovered = document.getElementById('total_recovered');
+                            total_cases.innerHTML = 'Total cases:' + data.cases;
+                            total_cases.style = 'color: #d801f1; font-size: 30px';
+                            total_deaths.innerText = 'Total deaths:' + data.deaths;
+                            total_deaths.style = 'color:red; font-size: 40px';
+                            total_recovered.innerText = 'Total Recovered: ' + data.recovered;
+                            total_recovered.style = 'color:green; font-size: 25px';
+                            break;
+
+                        case "Bangladesh":
+                            let bd_total_cases = document.getElementById('bd_total_cases');
+                            let bd_total_deaths = document.getElementById('bd_total_deaths');
+                            let bd_total_recovered = document.getElementById('bd_total_recovered');
+                            let bd_critical = document.getElementById('bd_critical');
+                            let bd_todayDeaths = document.getElementById('bd_todayDeaths');
+                            let bd_todayCases = document.getElementById('bd_todayCases');
+
+                            bd_total_cases.innerHTML = 'Total cases:' + data.cases;
+                            bd_total_cases.style = 'color: #d801f1; font-size: 30px';
+                            bd_total_deaths.innerText = 'Total deaths:' + data.deaths;
+                            bd_total_deaths.style = 'color:red; font-size: 40px';
+                            bd_total_recovered.innerText = 'Total Recovered: ' + data.recovered;
+                            bd_total_recovered.style = 'color:green; font-size: 25px';
+
+                            bd_critical.innerText = 'Critical: ' + data.critical;
+                            bd_critical.style = 'color:#000; font-size: 25px';
+
+                            bd_todayDeaths.innerText = 'Today Deaths: ' + data.todayDeaths;
+                            bd_todayDeaths.style = 'color:red; font-size: 25px';
+
+                            bd_todayCases.innerText = 'Today Cases: ' + data.todayCases;
+                            bd_todayCases.style = 'color:red; font-size: 25px';
+
+                            break;
+                    }
+
+                };
+            }
+
+            connect();
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <h3>Coronavirus Live Update</h3>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <div id="summary">
+                <h2>World wide summary</h2>
+                <hr>
+                <p id="total_cases"></p>
+                <p id="total_deaths"></p>
+                <p id="total_recovered"></p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="bangladesh">
+                <h2>Bangladesh</h2>
+                <hr>
+                <p id="bd_total_cases"></p>
+                <p id="bd_total_deaths"></p>
+                <p id="bd_total_recovered"></p>
+                <p id="bd_critical"></p>
+                <p id="bd_todayDeaths"></p>
+                <p id="bd_todayCases"></p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
