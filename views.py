@@ -5,6 +5,7 @@ import aiohttp_jinja2
 from aiohttp import web
 
 from db import create_record, fetch_last_data, update_record
+from mail import send_mail
 
 log = logging.getLogger(__name__)
 
@@ -57,6 +58,7 @@ async def index(request):
             fetch_dict = fetch_data.to_dict()
             if fetch_dict["death"] != create["today_deaths"] and fetch_dict["affected"] != create['today_affected']:
                 await update_record(fetch_data, create)
+                send_mail(data=bd)
         else:
             await create_record(**create)
 
