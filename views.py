@@ -6,6 +6,7 @@ from aiohttp import web
 
 from db import create_record, fetch_last_data, update_record
 from mail import send_mail
+from settings import API_HOST
 
 log = logging.getLogger(__name__)
 
@@ -23,18 +24,18 @@ async def summary():
     :return:
     """
     async with aiohttp.ClientSession() as session:
-        response = await fetch(session, 'https://coronavirus-19-api.herokuapp.com/all')
+        response = await fetch(session, API_HOST + '/all')
         return response
 
 
 async def bangladesh():
     async with aiohttp.ClientSession() as session:
-        return await fetch(session, 'https://coronavirus-19-api.herokuapp.com/countries/bangladesh')
+        return await fetch(session, API_HOST + '/countries/bangladesh')
 
 
 async def top_deaths_country():
     async with aiohttp.ClientSession() as session:
-        return await fetch(session, 'https://coronavirus-19-api.herokuapp.com/countries')
+        return await fetch(session, API_HOST + '/countries')
 
 
 async def index(request):
