@@ -5,7 +5,7 @@ import jinja2
 import aiohttp_jinja2
 from aiohttp import web
 
-from covid_report.views import index
+from views import index
 
 
 async def init_app():
@@ -13,7 +13,7 @@ async def init_app():
 
     app['websockets'] = {}
     app.on_shutdown.append(shutdown)
-    aiohttp_jinja2.setup(app, loader=jinja2.PackageLoader('covid_report', 'templates'))
+    aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader('templates'))
     app.router.add_get('/', index)
 
     return app
