@@ -70,4 +70,4 @@ async def index(request):
 
         await ws_current.send_json(world)
         await ws_current.send_json(bd)
-        await asyncio.sleep(10)
+        await asyncio.sleep(900)  # 15 minutes
