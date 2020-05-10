@@ -59,7 +59,8 @@ async def index(request):
             fetch_dict = fetch_data.to_dict()
             if fetch_dict["death"] != create["today_deaths"] and fetch_dict["affected"] != create['today_affected']:
                 await update_record(fetch_data, create)
-                send_mail(data=bd)
+                if create['today_deaths'] != 0 or create['today_affected'] != 0:
+                    send_mail(data=bd)
         else:
             await create_record(**create)
 
